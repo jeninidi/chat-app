@@ -1,4 +1,5 @@
 //client side
+
 const socket = io()
 
 //Elements
@@ -12,10 +13,34 @@ const $messages = document.querySelector('#messages')
 //Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
+const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 
 //Options
-const {username, room} = Qs.parse(location.search, {ignoreQueryPrefix: true})
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
 
+const autoscroll = () => {
+    //getting every new message
+    const $newMessage = $messages.lastElementChild
+
+    //getting the length of the last message
+    const newMessageStyles = getComputedStyle($newMessage)
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin
+
+    //visible height
+    const visibleHeight = $messages.offsetHeight
+
+    //height of messages container
+    const containerHeight = $messages.scrollHeight
+
+    //how far has user scrolled
+    const scrollOffset = $messages.scrollTop + visibleHeight
+
+    //logic
+    if (containerHeight - newMessageHeight <= scrollOffset) {
+        $messages.scrollTop = $messages.scrollHeight
+    }
+}
 
 socket.on('message', (message) => {
     console.log(message)
@@ -27,9 +52,10 @@ socket.on('message', (message) => {
     })
     //selecting where exacty to insert the new events
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
-socket.on('locationMessage', (message)=>{
+socket.on('locationMessage', (message) => {
     console.log(message)
     const html = Mustache.render(locationMessageTemplate, {
         username: message.username,
@@ -37,6 +63,15 @@ socket.on('locationMessage', (message)=>{
         createdAt: moment(message.createdAt).format('h:mm a')
     })
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
+})
+
+socket.on('roomData', ({ room, users }) => {
+    const html = Mustache.render(sidebarTemplate, {
+        room,
+        users
+    })
+    document.querySelector('#sidebar').innerHTML = html
 })
 
 $messageForm.addEventListener('submit', (e) => {
@@ -67,7 +102,7 @@ $sendLocationButton.addEventListener('click', () => {
         return alert('Geolocation is not supported by your browser')
     }
     //disable
-    $sendLocationButton.setAttribute('disabled','disabled')
+    $sendLocationButton.setAttribute('disabled', 'disabled')
 
     navigator.geolocation.getCurrentPosition((position) => {
         socket.emit('sendLocation', {
@@ -82,7 +117,7 @@ $sendLocationButton.addEventListener('click', () => {
     })
 })
 
-socket.emit('join', {username, room}, (error)=>{
+socket.emit('join', { username, room }, (error) => {
     if (error) {
         alert(error)
         location.href = '/'
