@@ -104,7 +104,7 @@ button:disabled {
     max-height: 100vh;
 }
 
-.chat__messages {
+.chat-messages {
     flex-grow: 1;
     padding: 24px 24px 0 24px;
     overflow-y: scroll;
@@ -116,13 +116,13 @@ button:disabled {
     margin-bottom: 16px;   
 }
 
-.message__name {
+.message-name {
     font-weight: 600;
     font-size: 14px;
     margin-right: 8px;
 }
 
-.message__meta {
+.message-meta {
     color: #777;
     font-size: 14px;
 }
