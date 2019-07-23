@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html>
 
-<head></head>
+<head>
+    <title>My chat applicatoin</title>
+    <link rel="icon" href="/img/favicon.png">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
 
 <body>
-    Chat App
+    <div class="chat">
+        <div class="sidebar">
 
-    <div id="messages"></div>
+        </div>
 
-    <form id="message-form">
-        <input name="message" placeholder="Message">
-        <button>Send</button>
-    </form>
-    <button id="send-locaton">Send locaton</button>
+        <div class="main">
+            <div id="messages"></div>
+
+            <form id="message-form">
+                <input name="message" placeholder="Message">
+                <button>Send</button>
+            </form>
+            <button id="send-locaton">Send locaton</button>
+        </div>
+    </div>
 
     <script id="message-template" type="text/html">
         <div>
@@ -22,7 +32,7 @@
 
     <script id="location-message-template" type="text/html">
         <div>
-            <p><a href="{{url}}" target='_blank'>My current location</a></p>
+            <p>{{createdAt}} - <a href="{{url}}" target='_blank'>My current location</a></p>
         </div>
     </script>
 

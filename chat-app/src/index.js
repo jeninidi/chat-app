@@ -5,6 +5,8 @@ const socketio = require('socket.io')
 const Filter = require('bad-words')
 
 const {generateMessage} = require('./utils/messages')
+const {generateLocationMessage} = require('./utils/messages')
+
  
 
 const app = express()
@@ -33,13 +35,13 @@ io.on('connection', (socket)=>{
     }) 
 
     socket.on('sendLocation', (coords, callback)=>{
-        io.emit('locationMessage', `https://google.com/maps?q=${coords.latitude},${coords.longtitude}`)
+        io.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longtitude}`))
         callback()
     })
 
     //built in event
     socket.on('disconnect', ()=>{
-        io.emit('message', 'A user has left!')
+        io.emit('message', generateMessage('A user has left!'))
     })
 })
 

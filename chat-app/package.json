@@ -1,13 +1,13 @@
 {
   "name": "chat-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Bachelor project",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
-  "author": "",
+  "author": "Zheni_Dimitrova",
   "license": "ISC",
   "dependencies": {
     "bad-words": "^3.0.0",
